@@ -25,6 +25,27 @@
       "vite/client": [
         "../node_modules/vite/client"
       ],
+      "vue-i18n": [
+        "../node_modules/vue-i18n"
+      ],
+      "@intlify/shared": [
+        "../node_modules/@intlify/shared"
+      ],
+      "@intlify/core": [
+        "../node_modules/@intlify/core"
+      ],
+      "@intlify/core-base": [
+        "../node_modules/@intlify/core-base"
+      ],
+      "@intlify/utils": [
+        "../node_modules/@intlify/utils"
+      ],
+      "@intlify/utils/h3": [
+        "../node_modules/@intlify/utils"
+      ],
+      "@intlify/message-compiler": [
+        "../node_modules/@intlify/message-compiler"
+      ],
       "nitropack/types": [
         "../node_modules/nitropack/types"
       ],
@@ -86,7 +107,11 @@
     "../node_modules",
     "../../node_modules",
     "../node_modules/nuxt/node_modules",
-    "../node_modules/@nuxt/devtools/node_modules",
+    "../node_modules/@primevue/nuxt-module/node_modules",
+    "../node_modules/@nuxtjs/tailwindcss/node_modules",
+    "../node_modules/@pinia/nuxt/node_modules",
+    "../node_modules/@nuxtjs/i18n/node_modules",
+    "../node_modules/@nuxt/icon/node_modules",
     "../node_modules/@nuxt/telemetry/node_modules",
     "../dist",
     "../.data",

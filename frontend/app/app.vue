@@ -1,6 +1,8 @@
+<script setup>
+</script>
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+  <div class="p-4">
+    <AtomsTest></AtomsTest>
+    <AtomsButton></AtomsButton>
   </div>
 </template>
