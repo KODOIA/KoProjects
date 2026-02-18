@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@primevue/forms": "^4.5.4"
+  }
+}
