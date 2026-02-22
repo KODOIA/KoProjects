@@ -16,7 +16,7 @@
           placeholder="Vorname"
           :rules="[rules.required, rules.max64Characters]"
           :form-context="$form"
-          prepend-icon="arrow-left-up-linear"
+          prepend-icon="arrow-down-left-01"
           @click:prepend-icon="test1"
         />
 
@@ -25,7 +25,7 @@
           placeholder="Nachname"
           :rules="[rules.required, rules.max64Characters]"
           :form-context="$form"
-          append-icon="arrow-right-down-linear"
+          append-icon="lock-password"
           @click:append-icon="test2"
         />
 

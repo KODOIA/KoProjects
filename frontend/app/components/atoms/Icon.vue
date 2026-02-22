@@ -9,7 +9,7 @@ defineProps({
     },
     collection: {
         type: String,
-        default: 'solar',
+        default: 'hugeicons',
     },
     color: {
         type: String,
