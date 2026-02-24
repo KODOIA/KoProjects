@@ -1,10 +1,13 @@
 <template>
   <div class="flex flex-col gap-1">
     <IconField v-if="prependIcon || appendIcon">
-      <InputIcon 
+      <InputIcon
         v-if="prependIcon"
         :class="{ 'cursor-pointer': hasPrependIconClick }"
-        :style="{ pointerEvents: hasPrependIconClick ? 'auto' : 'none', zIndex: 10 }"
+        :style="{
+          pointerEvents: hasPrependIconClick ? 'auto' : 'none',
+          zIndex: 10,
+        }"
         @click="handlePrependIconClick"
       >
         <AtomsIcon :icon="prependIcon" :color="prependIconColor" />
@@ -19,10 +22,13 @@
         fluid
       />
 
-      <InputIcon 
+      <InputIcon
         v-if="appendIcon"
         :class="{ 'cursor-pointer': hasAppendIconClick }"
-        :style="{ pointerEvents: hasAppendIconClick ? 'auto' : 'none', zIndex: 10 }"
+        :style="{
+          pointerEvents: hasAppendIconClick ? 'auto' : 'none',
+          zIndex: 10,
+        }"
         @click="handleAppendIconClick"
       >
         <AtomsIcon :icon="appendIcon" :color="appendIconColor" />
@@ -96,27 +102,27 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['click:prepend-icon', 'click:append-icon']);
+const emit = defineEmits(["click:prepend-icon", "click:append-icon"]);
 
 const registerField = inject("registerField", null);
 const instance = getCurrentInstance();
 
 const hasPrependIconClick = computed(() => {
-  return !!instance?.vnode?.props?.['onClick:prependIcon'];
+  return !!instance?.vnode?.props?.["onClick:prependIcon"];
 });
 
 const hasAppendIconClick = computed(() => {
-  return !!instance?.vnode?.props?.['onClick:appendIcon'];
+  return !!instance?.vnode?.props?.["onClick:appendIcon"];
 });
 
 const handlePrependIconClick = (event) => {
   event.stopPropagation();
-  emit('click:prepend-icon', event);
+  emit("click:prepend-icon", event);
 };
 
 const handleAppendIconClick = (event) => {
   event.stopPropagation();
-  emit('click:append-icon', event);
+  emit("click:append-icon", event);
 };
 
 onMounted(() => {
