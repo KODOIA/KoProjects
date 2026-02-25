@@ -17,7 +17,7 @@ public class AuthorizeController : ControllerBase
     }
 
     [SwaggerOperation(
-        Summary = "Exchanges an authorization code for tokens.",
+        Summary = "Authorize",
         Description = "Accepts an authorization code and code verifier (PKCE) and returns access token, refresh token, expiry and token type.")]
     [HttpPost]
     [ProducesResponseType(typeof(AddAuthorizeResponse), StatusCodes.Status200OK)]
