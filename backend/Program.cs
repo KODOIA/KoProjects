@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
 public class Program
@@ -32,6 +34,12 @@ public class Program
         services.AddScoped<Features.Authorize.Add.AddAuthorizeHandler>();
     }
 
+    public static void AddDatabase(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+    }
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -51,6 +59,7 @@ public class Program
         });
 
         AddServices(builder.Services);
+        AddDatabase(builder.Services, builder.Configuration);
 
         var app = builder.Build();
         app.UseCors("ConfiguredOrigins");
