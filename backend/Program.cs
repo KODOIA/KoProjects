@@ -1,41 +1,82 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Text.Json.Serialization;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.MapOpenApi();
-}
+    public static void AddServices(IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+        services.AddHttpClient();
 
-app.UseHttpsRedirection();
+        services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "KoProjects API",
+                Description = "API for KoProjects"
+            });
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+            c.EnableAnnotations();
+        });
 
-app.Run();
+        services.AddScoped<Features.Token.TokenHandler>();
+    }
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public static void AddDatabase(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+    }
+
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("ConfiguredOrigins", policy =>
+            {
+                if(allowedOrigins.Length > 0)
+                {
+                    policy.WithOrigins(allowedOrigins)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                }
+            });
+        });
+
+        AddServices(builder.Services);
+        AddDatabase(builder.Services, builder.Configuration);
+
+        var app = builder.Build();
+        app.UseCors("ConfiguredOrigins");
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseReDoc(c =>
+            {
+                c.RoutePrefix = "docs";
+                c.SpecUrl("/swagger/v1/swagger.json");
+                c.DocumentTitle = "KoProjects API Documentation";
+            });
+        }
+
+        app.MapControllers();
+        app.Run();
+    }
 }
