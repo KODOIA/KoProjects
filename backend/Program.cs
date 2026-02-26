@@ -31,7 +31,7 @@ public class Program
             c.EnableAnnotations();
         });
 
-        services.AddScoped<Features.Authorize.Add.AddAuthorizeHandler>();
+        services.AddScoped<Features.Token.TokenHandler>();
     }
 
     public static void AddDatabase(IServiceCollection services, IConfiguration configuration)

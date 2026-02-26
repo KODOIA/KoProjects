@@ -112,7 +112,6 @@ export const useFormRules = () => {
       }
       return true;
     },
-    // Für Verwendung mit Feldnamen statt direktem Wert
     sameAsField: (otherFieldName, fieldLabel = 'das andere Feld') => (value, allValues) => {
       if (value !== allValues?.[otherFieldName]) {
         return t('sameAs', { fieldName: fieldLabel });

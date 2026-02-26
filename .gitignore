@@ -2,6 +2,7 @@
 /frontend/.nuxt
 /frontend/.output
 /frontend/dist
+/frontend/.env
 
 /backend/bin/
 /backend/obj/

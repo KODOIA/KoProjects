@@ -4,6 +4,14 @@ export default defineNuxtConfig({
   devServer: {
     port: 2011
   },
+  runtimeConfig: {
+    public: {
+      keycloakAuthUrl: '',
+      keycloakClientId: '',
+      keycloakRedirectUri: '',
+      apiBaseUrl: ''
+    }
+  },
   css: ['~/assets/css/tailwind.css'],
   modules: [
     "@primevue/nuxt-module",

@@ -1,6 +1,6 @@
-namespace Features.Authorize.Add;
+namespace Features.Token;
 
-public sealed class AddAuthorizeResponse 
+public sealed class TokenResponse
 {
     public required string AccessToken { get; set; }
     public required string RefreshToken { get; set; }
