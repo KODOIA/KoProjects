@@ -3,9 +3,10 @@
 /frontend/.output
 /frontend/dist
 /frontend/.env
+/frontend/package-lock.json
+
 
 /backend/bin/
 /backend/obj/
-
 /backend/appsettings.Development.json
 /backend/appsettings.json
