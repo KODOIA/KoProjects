@@ -74,6 +74,10 @@ export const useAuth = () => {
     accessToken.value = response.accessToken;
     refreshToken.value = response.refreshToken;
 
+    const userStore = useUserStore();
+    const payload = decodeJwtPayload(response.accessToken);
+    if (payload) userStore.setFromTokenPayload(payload);
+
     pkceVerifier.value = null;
 
     return response;
@@ -90,12 +94,20 @@ export const useAuth = () => {
     accessToken.value = response.accessToken;
     refreshToken.value = response.refreshToken;
 
+    const userStore = useUserStore();
+    const payload = decodeJwtPayload(response.accessToken);
+
+    console.log(payload)
+    if (payload) userStore.setFromTokenPayload(payload);
+
     return response;
   };
 
   const logout = () => {
     accessToken.value = null;
     refreshToken.value = null;
+    const userStore = useUserStore();
+    userStore.clear();
   };
 
   const isAuthenticated = computed(() => {
