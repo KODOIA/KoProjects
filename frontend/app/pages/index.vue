@@ -4,8 +4,8 @@
 
     <div class="mb-8 p-6 border rounded-lg">
       <h2 class="text-xl font-semibold mb-4">Kontaktformular</h2>
-      
-      <AtomsForm 
+
+      <AtomsForm
         ref="contactForm"
         @submit="handleContactSubmit"
         @error="handleContactError"
@@ -44,32 +44,37 @@
           :form-context="$form"
         />
 
-        <AtomsButton 
-          type="submit" 
-          label="Absenden" 
-          severity="primary"
-        />
+        <AtomsButton type="submit" label="Absenden" severity="primary" />
       </AtomsForm>
 
       <ClientOnly>
-        <div v-if="contactSubmitted" class="mt-4 p-4 bg-green-100 text-green-800 rounded">
+        <div
+          v-if="contactSubmitted"
+          class="mt-4 p-4 bg-green-100 text-green-800 rounded"
+        >
           ✓ Formular erfolgreich abgesendet!
         </div>
+
+        <div>{{ "Aktueller Benutzer:" + userStore.email }}</div>
       </ClientOnly>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useUserStore } from "#imports";
+
+const userStore = useUserStore();
+
 const { rules } = useFormRules();
 
 // Kontaktformular
 const contactSubmitted = ref(false);
 
 const handleContactSubmit = (values) => {
-  console.log('Kontaktformular abgesendet:', values);
+  console.log("Kontaktformular abgesendet:", values);
   contactSubmitted.value = true;
-  
+
   // Verstecke Erfolgsmeldung nach 3 Sekunden
   setTimeout(() => {
     contactSubmitted.value = false;
@@ -77,24 +82,24 @@ const handleContactSubmit = (values) => {
 };
 
 const test1 = () => {
-  console.log('Prepend-Icon geklickt');
+  console.log("Prepend-Icon geklickt");
 };
 
 const test2 = () => {
-  console.log('Append-Icon geklickt');
+  console.log("Append-Icon geklickt");
 };
 
 const handleContactError = (errors) => {
-  console.log('Kontaktformular Fehler:', errors);
+  console.log("Kontaktformular Fehler:", errors);
 };
 
 // Registrierungsformular
 const registrationSubmitted = ref(false);
 
 const handleRegistrationSubmit = (values) => {
-  console.log('Registrierung abgesendet:', values);
+  console.log("Registrierung abgesendet:", values);
   registrationSubmitted.value = true;
-  
+
   setTimeout(() => {
     registrationSubmitted.value = false;
   }, 3000);
@@ -104,9 +109,9 @@ const handleRegistrationSubmit = (values) => {
 const advancedSubmitted = ref(false);
 
 const handleAdvancedSubmit = (values) => {
-  console.log('Erweitertes Formular abgesendet:', values);
+  console.log("Erweitertes Formular abgesendet:", values);
   advancedSubmitted.value = true;
-  
+
   setTimeout(() => {
     advancedSubmitted.value = false;
   }, 3000);
