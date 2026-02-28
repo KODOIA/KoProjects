@@ -1,5 +1,5 @@
 <template>
-    <Icon :name="`${collection}:${icon}`" :style="{ color: color }" />
+    <Icon :name="`${collection}:${icon}`" :style="{ color: color }" :size="size" />
 </template>
 <script setup>
 defineProps({
@@ -14,6 +14,10 @@ defineProps({
     color: {
         type: String,
         default: 'black',
-    }
+    },
+    size: {
+        type: [String, Number],
+        default: '1em',
+    },
 })
 </script>

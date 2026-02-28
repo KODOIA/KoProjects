@@ -30,7 +30,7 @@ const props = defineProps({
   },
   severity: {
     type: String,
-    default: 'secondary',
+    default: 'primary',
     validator: (value) => ['primary', 'secondary', 'success', 'info', 'warn', 'help', 'danger', 'contrast'].includes(value),
   },
   disabled: {
