@@ -65,16 +65,12 @@ export const useAuth = () => {
     const verifier = pkceVerifier.value;
     if (!verifier) throw new Error('PKCE verifier not found. Please try logging in again.');
 
-    const response = await $fetch(`${config.public.apiBaseUrl}/api/token`, {
-      method: 'POST',
-      body: { grantType: 'authorization_code', code, codeVerifier: verifier },
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const userStore = useUserStore();
+    const response = await userStore.exchangeCode(code, verifier);
 
     accessToken.value = response.accessToken;
     refreshToken.value = response.refreshToken;
 
-    const userStore = useUserStore();
     const payload = decodeJwtPayload(response.accessToken);
     if (payload) userStore.setFromTokenPayload(payload);
 
@@ -86,15 +82,11 @@ export const useAuth = () => {
   const refresh = async () => {
     if (!refreshToken.value) throw new Error('No refresh token available.');
 
-    const response = await $fetch(`${config.public.apiBaseUrl}/api/token`, {
-      method: 'POST',
-      body: { grantType: 'refresh_token', refreshToken: refreshToken.value }
-    });
+    const userStore = useUserStore();
+    const response = await userStore.refreshToken(refreshToken.value);
 
     accessToken.value = response.accessToken;
     refreshToken.value = response.refreshToken;
-
-    const userStore = useUserStore();
     const payload = decodeJwtPayload(response.accessToken);
 
     console.log(payload)
