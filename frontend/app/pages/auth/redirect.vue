@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen flex items-center justify-center">
-    <AtomsAnimatedGradient />
+    <VisualsAnimatedGradient />
 
     <Card style="width: 25rem; overflow: hidden; position: relative; z-index: 1;">
       <template #title>
@@ -13,7 +13,7 @@
       </template>
       <template #content>
         <div v-if="error" class="flex flex-col items-center gap-3 py-2">
-          <AtomsIcon icon="alert-diamond" size="2em" color="red" />
+          <VisualsIcon icon="alert-diamond" size="2em" color="red" />
           <p class="text-red-500 text-sm text-center m-0">{{ error }}</p>
         </div>
         <div v-else class="flex flex-col items-center gap-3 py-2">
@@ -25,7 +25,7 @@
       </template>
       <template v-if="error" #footer>
         <div class="flex gap-4 mt-1">
-          <AtomsButton
+          <InputButton
             :label="t('authRedirectRetry')"
             class="w-full"
             @click="retry"

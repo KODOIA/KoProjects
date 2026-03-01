@@ -10,7 +10,7 @@
         }"
         @click="handlePrependIconClick"
       >
-        <AtomsIcon :icon="prependIcon" :color="prependIconColor" />
+        <VisualsIcon :icon="prependIcon" :color="prependIconColor" />
       </InputIcon>
 
       <InputText
@@ -31,7 +31,7 @@
         }"
         @click="handleAppendIconClick"
       >
-        <AtomsIcon :icon="appendIcon" :color="appendIconColor" />
+        <VisualsIcon :icon="appendIcon" :color="appendIconColor" />
       </InputIcon>
     </IconField>
 

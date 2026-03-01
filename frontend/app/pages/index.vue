@@ -5,13 +5,13 @@
     <div class="mb-8 p-6 border rounded-lg">
       <h2 class="text-xl font-semibold mb-4">Kontaktformular</h2>
 
-      <AtomsForm
+      <ContainmentForm
         ref="contactForm"
         @submit="handleContactSubmit"
         @error="handleContactError"
         v-slot="{ form: $form }"
       >
-        <AtomsInputText
+        <InputTextField
           name="firstName"
           placeholder="Vorname"
           :rules="[rules.required, rules.max64Characters]"
@@ -20,7 +20,7 @@
           @click:prepend-icon="test1"
         />
 
-        <AtomsInputText
+        <InputTextField
           name="lastName"
           placeholder="Nachname"
           :rules="[rules.required, rules.max64Characters]"
@@ -29,7 +29,7 @@
           @click:append-icon="test2"
         />
 
-        <AtomsInputText
+        <InputTextField
           name="email"
           type="email"
           placeholder="E-Mail"
@@ -37,15 +37,15 @@
           :form-context="$form"
         />
 
-        <AtomsInputText
+        <InputTextField
           name="phone"
           placeholder="Telefon (optional)"
           :rules="[rules.phone]"
           :form-context="$form"
         />
 
-        <AtomsButton type="submit" label="Absenden" severity="primary" />
-      </AtomsForm>
+        <InputButton type="submit" label="Absenden" severity="primary" />
+      </ContainmentForm>
 
       <ClientOnly>
         <div
