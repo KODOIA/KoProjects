@@ -5,7 +5,7 @@ using Infrastructure.Data;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Features.Token;
+namespace Features.Token.Post;
 
 public sealed class TokenHandler
 {

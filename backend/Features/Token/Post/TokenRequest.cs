@@ -1,4 +1,4 @@
-namespace Features.Token;
+namespace Features.Token.Post;
 
 public sealed class TokenRequest
 {

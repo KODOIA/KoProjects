@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Features.Token.Post;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Features.Token;
