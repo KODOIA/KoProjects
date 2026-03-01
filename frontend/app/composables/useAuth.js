@@ -51,7 +51,7 @@ export const useAuth = () => {
       response_type: 'code',
       client_id: config.public.keycloakClientId,
       redirect_uri: config.public.keycloakRedirectUri,
-      scope: 'openid profile email',
+      scope: 'openid profile email organization',
       code_challenge: challenge,
       code_challenge_method: 'S256'
     });
