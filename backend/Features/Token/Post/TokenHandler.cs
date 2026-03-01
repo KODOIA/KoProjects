@@ -52,7 +52,9 @@ public sealed class TokenHandler
         }, tokenEndpoint, cancellationToken);
 
         var userClaims = DecodeJwtPayload(tokenData.AccessToken);
-        await UpsertUser(userClaims, cancellationToken);
+        var userId = await UpsertUser(userClaims, cancellationToken);
+        if (userId.HasValue)
+            await UpsertOrganizations(userId.Value, userClaims, cancellationToken);
 
         return MapToResponse(tokenData);
     }
@@ -122,13 +124,13 @@ public sealed class TokenHandler
             ?? [];
     }
 
-    private async Task UpsertUser(Dictionary<string, JsonElement> claims, CancellationToken cancellationToken)
+    private async Task<Guid?> UpsertUser(Dictionary<string, JsonElement> claims, CancellationToken cancellationToken)
     {
         if (!claims.TryGetValue("sub", out var subElement))
-            return;
+            return null;
 
         if (!Guid.TryParse(subElement.GetString(), out var userId))
-            return;
+            return null;
 
         var existing = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
@@ -161,5 +163,57 @@ public sealed class TokenHandler
         }
 
         await _dbContext.SaveChangesAsync(cancellationToken);
+        return userId;
     }
-}
+
+    private async Task UpsertOrganizations(Guid userId, Dictionary<string, JsonElement> claims, CancellationToken cancellationToken)
+    {
+        if (!claims.TryGetValue("organization", out var orgElement))
+            return;
+
+        var organizationIds = orgElement.EnumerateArray()
+            .Select(e => e.GetString())
+            .Where(s => !string.IsNullOrEmpty(s) && Guid.TryParse(s, out _))
+            .Select(s => Guid.Parse(s!))
+            .ToList();
+
+        if (organizationIds.Count == 0)
+            return;
+
+        var existingOrgs = await _dbContext.Organizations
+            .Where(o => organizationIds.Contains(o.Id))
+            .Select(o => o.Id)
+            .ToListAsync(cancellationToken);
+
+        var existingOrgUsers = await _dbContext.OrganizationUsers
+            .Where(ou => ou.UserId == userId && organizationIds.Contains(ou.OrganizationId))
+            .Select(ou => ou.OrganizationId)
+            .ToListAsync(cancellationToken);
+
+        foreach (var orgId in organizationIds)
+        {
+            if (!existingOrgs.Contains(orgId))
+            {
+                _dbContext.Organizations.Add(new Organization
+                {
+                    Id = orgId,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    UpdatedAt = DateTimeOffset.UtcNow
+                });
+            }
+
+            if (!existingOrgUsers.Contains(orgId))
+            {
+                _dbContext.OrganizationUsers.Add(new OrganizationUser
+                {
+                    Id = Guid.NewGuid(),
+                    OrganizationId = orgId,
+                    UserId = userId,
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    UpdatedAt = DateTimeOffset.UtcNow
+                });
+            }
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }}
